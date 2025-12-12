@@ -1,14 +1,14 @@
 {
-    "name": "write-better",
+    "name": "reflow",
     "version": "1.0.0",
     "description": "CLI tool to reformat text using Claude API",
     "main": "index.js",
     "bin": {
-        "write-better": "./dist/write-better"
+        "reflow": "./dist/reflow"
     },
     "scripts": {
         "start": "bun src/main.ts",
-        "build": "bun build src/main.ts --compile --outfile dist/write-better"
+        "build": "bun build src/main.ts --compile --outfile dist/reflow"
     },
     "keywords": [],
     "author": "",
