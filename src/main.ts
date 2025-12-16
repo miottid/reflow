@@ -13,8 +13,7 @@ const client = new Anthropic({ apiKey })
 const promptPrefix =
     'Please translate from French to English if it is not already in English and reformat the following text to be:\n' +
     '- Succinct and clear\n' +
-    '- Professional and corporate-appropriate\n' +
-    '- With a subtle touch of irony when appropriate\n\n' +
+    '- Professional and corporate-appropriate\n\n' +
     'Original text: '
 
 function buildPrompt(text: string): string {
