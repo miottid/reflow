@@ -7,8 +7,8 @@
         "reflow": "./dist/reflow"
     },
     "scripts": {
-        "start": "bun src/main.ts",
-        "build": "bun build src/main.ts --compile --outfile dist/reflow"
+        "start": "bun reflow.ts",
+        "build": "bun build reflow.ts --compile --outfile dist/reflow"
     },
     "keywords": [],
     "author": "",

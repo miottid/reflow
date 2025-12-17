@@ -28,7 +28,7 @@ export ANTHROPIC_API_KEY=your_api_key
 Run the tool directly to enter interactive mode:
 
 ```bash
-bun start
+./reflow.ts
 ```
 
 Type your text, then press `Ctrl+D` to submit. Press `Ctrl+C` to exit.
@@ -38,13 +38,13 @@ Type your text, then press `Ctrl+D` to submit. Press `Ctrl+C` to exit.
 You can also pipe text directly:
 
 ```bash
-echo "Your text here" | bun start
+echo "Your text here" | ./reflow.ts
 ```
 
 Or from a file:
 
 ```bash
-cat myfile.txt | bun start
+cat myfile.txt | ./reflow.ts
 ```
 
 ## Building

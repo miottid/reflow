@@ -1,3 +1,4 @@
+#!/usr/bin/env bun
 import Anthropic from '@anthropic-ai/sdk'
 
 const apiKey = process.env.ANTHROPIC_API_KEY
