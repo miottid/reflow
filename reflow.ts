@@ -12,9 +12,11 @@ if (!apiKey) {
 const client = new Anthropic({ apiKey })
 
 const promptPrefix =
-    'Please translate from French to English if it is not already in English and reformat the following text to be:\n' +
+    'Help an employee draft content for our internal communication platform.\n' +
+    'If the input is in French, translate it to English. Then reformat the text to be:\n' +
     '- Succinct and clear\n' +
-    '- Professional and corporate-appropriate\n\n' +
+    '- Friendly and warm in tone\n\n' +
+    'Return only the reformatted text, without any explanation or preamble.\n\n' +
     'Original text: '
 
 function buildPrompt(text: string): string {
