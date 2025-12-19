@@ -12,7 +12,7 @@ if (!apiKey) {
 const client = new Anthropic({ apiKey })
 
 const promptPrefix =
-    'Help an employee draft content for our internal communication platform.\n' +
+    'Help me draft content for answering a collaborator.\n' +
     'If the input is in French, translate it to English. Then reformat the text to be:\n' +
     '- Succinct and clear\n' +
     '- Friendly and warm in tone\n\n' +
