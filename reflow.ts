@@ -1,5 +1,8 @@
 #!/usr/bin/env bun
 import Anthropic from '@anthropic-ai/sdk'
+import { existsSync, readFileSync } from 'node:fs'
+import { homedir } from 'node:os'
+import { join } from 'node:path'
 
 const apiKey = process.env.ANTHROPIC_API_KEY
 
@@ -11,13 +14,23 @@ if (!apiKey) {
 
 const client = new Anthropic({ apiKey })
 
-const promptPrefix =
+const defaultPromptPrefix =
     'Help me draft content for answering a collaborator.\n' +
     'If the input is in French, translate it to English. Then reformat the text to be:\n' +
     '- Succinct and clear\n' +
     '- Friendly and warm in tone\n\n' +
     'Return only the reformatted text, without any explanation or preamble.\n\n' +
     'Original text: '
+
+function loadPromptPrefix(): string {
+    const configPath = join(homedir(), 'reflow.txt')
+    if (existsSync(configPath)) {
+        return readFileSync(configPath, 'utf8').trim()
+    }
+    return defaultPromptPrefix
+}
+
+const promptPrefix = loadPromptPrefix()
 
 function buildPrompt(text: string): string {
     return (
