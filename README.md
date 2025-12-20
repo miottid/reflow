@@ -1,6 +1,6 @@
 # Reflow
 
-A CLI tool that uses Claude AI to reformat text, making it more succinct, clear, and professional. It also translates French text to English automatically.
+A CLI tool that uses Claude AI to improve text, making it clear, concise, and professional while preserving its original meaning.
 
 ## Requirements
 
@@ -20,6 +20,16 @@ Set your Anthropic API key as an environment variable:
 ```bash
 export ANTHROPIC_API_KEY=your_api_key
 ```
+
+### Custom Prompt
+
+By default, Reflow uses a built-in prompt for improving text. You can customize this by creating a `~/reflow.txt` file with your own prompt:
+
+```bash
+echo "Your custom prompt here" > ~/reflow.txt
+```
+
+If the file exists, its contents will be used as the prompt prefix. Delete the file to revert to the default behavior.
 
 ## Usage
 
