@@ -15,11 +15,13 @@ if (!apiKey) {
 const client = new Anthropic({ apiKey })
 
 const defaultPromptPrefix =
-    'Help me draft content for answering a collaborator.\n' +
-    'If the input is in French, translate it to English. Then reformat the text to be:\n' +
-    '- Succinct and clear\n' +
-    '- Friendly and warm in tone\n\n' +
-    'Return only the reformatted text, without any explanation or preamble.\n\n' +
+    'Improve the following text.\n\n' +
+    'Rules:\n' +
+    '- Preserve the original meaning and essence\n' +
+    '- Fix any grammar, spelling, or punctuation errors\n' +
+    '- Keep the tone professional and respectful\n' +
+    '- Be clear and concise without changing the substance\n\n' +
+    'Return only the improved text, without any explanation.\n\n' +
     'Original text: '
 
 function loadPromptPrefix(): string {
@@ -35,7 +37,7 @@ const promptPrefix = loadPromptPrefix()
 function buildPrompt(text: string): string {
     return (
         promptPrefix +
-        text +
+        text.trim() +
         '\n\n' +
         'Return only the reformatted text, without any explanation or preamble.'
     )
