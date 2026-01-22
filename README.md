@@ -4,14 +4,18 @@ A CLI tool that uses Claude AI to improve text, making it clear, concise, and pr
 
 ## Requirements
 
-- [Bun](https://bun.sh/) runtime
+- Rust
 - Anthropic API key
 
 ## Installation
 
+Install dependencies and build:
+
 ```bash
-bun install
+cargo build --release
 ```
+
+The compiled binary will be at `target/release/reflow`.
 
 ## Configuration
 
@@ -38,7 +42,9 @@ If the file exists, its contents will be used as the prompt prefix. Delete the f
 Run the tool directly to enter interactive mode:
 
 ```bash
-./reflow.ts
+./target/release/reflow
+# or during development:
+cargo run
 ```
 
 Type your text, then press `Ctrl+D` to submit. Press `Ctrl+C` to exit.
@@ -48,27 +54,27 @@ Type your text, then press `Ctrl+D` to submit. Press `Ctrl+C` to exit.
 You can also pipe text directly:
 
 ```bash
-echo "Your text here" | ./reflow.ts
-```
-
-Or from a file:
-
-```bash
-cat myfile.txt | ./reflow.ts
+echo "Your text here" | ./target/release/reflow
+# or:
+cargo run < myfile.txt
 ```
 
 ## Building
 
-Compile to a standalone executable:
+Compile to an optimized standalone executable (~1.3 MB):
 
 ```bash
-bun run build
+cargo build --release
 ```
 
-This creates `dist/reflow` which can be run directly:
+This creates `target/release/reflow` which can be run directly or installed:
 
 ```bash
-./dist/reflow
+# Run directly
+./target/release/reflow
+
+# Or install to system
+cargo install --path .
 ```
 
 ## License
