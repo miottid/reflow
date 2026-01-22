@@ -77,6 +77,40 @@ This creates `target/release/reflow` which can be run directly or installed:
 cargo install --path .
 ```
 
+## Development
+
+This project uses [just](https://github.com/casey/just) as a command runner. Install it first:
+
+```bash
+# macOS
+brew install just
+
+# Other platforms: see https://github.com/casey/just#installation
+```
+
+### Available Commands
+
+```bash
+just fmt-check   # Check code formatting
+just clippy      # Run clippy lints
+just test        # Run tests
+just check       # Run all checks (fmt, clippy, tests)
+just fmt         # Format code
+just build       # Build release binary
+```
+
+### Git Hooks
+
+Install git hooks to enforce code quality:
+
+```bash
+just install-hooks
+```
+
+This sets up:
+- **pre-commit hook**: Runs `just fmt-check` to ensure code is formatted
+- **pre-push hook**: Runs `just clippy` to catch lints before pushing
+
 ## License
 
 ISC
