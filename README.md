@@ -1,5 +1,7 @@
 # Reflow
 
+[![CI](https://github.com/miottid/reflow/actions/workflows/ci.yml/badge.svg)](https://github.com/miottid/reflow/actions/workflows/ci.yml)
+
 A CLI tool that uses Claude AI to improve text, making it clear, concise, and professional while preserving its original meaning.
 
 ## Requirements
