@@ -98,9 +98,8 @@ fn call_claude(text: &str, api_key: &str, prompt_prefix: &str) -> Result<String>
         anyhow::bail!("API request failed with status {}: {}", status, error_text);
     }
 
-    let message_response: MessageResponse = response
-        .json()
-        .context("Failed to parse API response")?;
+    let message_response: MessageResponse =
+        response.json().context("Failed to parse API response")?;
 
     let text_response = message_response
         .content
@@ -140,7 +139,7 @@ fn start_interactive_loop(api_key: &str, prompt_prefix: &str) -> Result<()> {
     let mut buffer = String::new();
 
     let print_prompt = || {
-        print!("Enter text (Ctrl+D to submit, Ctrl+C to exit):\n");
+        println!("Enter text (Ctrl+D to submit, Ctrl+C to exit):");
         io::stdout().flush().unwrap();
     };
 
@@ -179,7 +178,10 @@ fn start_interactive_loop(api_key: &str, prompt_prefix: &str) -> Result<()> {
         loop {
             let event = event::read().context("Failed to read event")?;
 
-            if let Event::Key(KeyEvent { code, modifiers, .. }) = event {
+            if let Event::Key(KeyEvent {
+                code, modifiers, ..
+            }) = event
+            {
                 match code {
                     // Ctrl+C exits
                     KeyCode::Char('c') if modifiers.contains(KeyModifiers::CONTROL) => {
@@ -202,7 +204,7 @@ fn start_interactive_loop(api_key: &str, prompt_prefix: &str) -> Result<()> {
                     // Enter key
                     KeyCode::Enter => {
                         buffer.push('\n');
-                        print!("\n");
+                        println!();
                         io::stdout().flush()?;
                     }
                     // Regular character
@@ -245,4 +247,92 @@ fn main() -> Result<()> {
     }
 
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_default_prompt_prefix_not_empty() {
+        assert!(!DEFAULT_PROMPT_PREFIX.is_empty());
+        assert!(DEFAULT_PROMPT_PREFIX.contains("Improve the following text"));
+    }
+
+    #[test]
+    fn test_build_prompt_formats_correctly() {
+        let prefix = "Test prefix: ";
+        let text = "  test text  ";
+        let result = build_prompt(text, prefix);
+
+        assert!(result.starts_with("Test prefix: "));
+        assert!(result.contains("test text"));
+        assert!(result
+            .ends_with("Return only the reformatted text, without any explanation or preamble."));
+        // Verify text is trimmed
+        assert!(!result.contains("  test text  "));
+    }
+
+    #[test]
+    fn test_build_prompt_handles_empty_text() {
+        let prefix = "Prefix: ";
+        let text = "   ";
+        let result = build_prompt(text, prefix);
+
+        // Should still build a valid prompt even with empty/whitespace text
+        assert!(result.contains("Prefix: "));
+        assert!(result.contains("Return only the reformatted text"));
+    }
+
+    #[test]
+    fn test_build_prompt_preserves_newlines() {
+        let prefix = "Prefix: ";
+        let text = "line1\nline2\nline3";
+        let result = build_prompt(text, prefix);
+
+        assert!(result.contains("line1\nline2\nline3"));
+    }
+
+    #[test]
+    fn test_message_request_serialization() {
+        let request = MessageRequest {
+            model: MODEL.to_string(),
+            max_tokens: MAX_TOKENS,
+            messages: vec![Message {
+                role: "user".to_string(),
+                content: "test".to_string(),
+            }],
+        };
+
+        let serialized = serde_json::to_string(&request).unwrap();
+        assert!(serialized.contains(MODEL));
+        assert!(serialized.contains("\"max_tokens\":1024"));
+        assert!(serialized.contains("\"role\":\"user\""));
+        assert!(serialized.contains("\"content\":\"test\""));
+    }
+
+    #[test]
+    fn test_message_response_deserialization() {
+        let json = r#"{
+            "content": [
+                {
+                    "type": "text",
+                    "text": "improved text"
+                }
+            ]
+        }"#;
+
+        let response: MessageResponse = serde_json::from_str(json).unwrap();
+        assert_eq!(response.content.len(), 1);
+        assert_eq!(response.content[0].block_type, "text");
+        assert_eq!(response.content[0].text, Some("improved text".to_string()));
+    }
+
+    #[test]
+    fn test_constants() {
+        assert_eq!(MODEL, "claude-sonnet-4-5-20250929");
+        assert_eq!(MAX_TOKENS, 1024);
+        assert_eq!(API_VERSION, "2023-06-01");
+        assert_eq!(API_ENDPOINT, "https://api.anthropic.com/v1/messages");
+    }
 }
